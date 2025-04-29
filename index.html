@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zona de Juegos Educativos</title>
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo-link">
+    <h1>📚 Zona de Juegos Educativos 📚</h1>
+  </a>
+</header>
+
+<main>
+  <h2>Elige una materia para comenzar</h2>
+  <p>Aprende de forma divertida practicando distintas materias.</p>
+
+  <div class="materia" onclick="toggleUnidades('ingles')">
+    Inglés
+    <div id="ingles" class="unidad">
+      <a href="ingles/unit_5.html">Unidad 5: Flashcards</a>
+    </div>
+  </div>
+
+  <div class="materia" onclick="toggleUnidades('mates')">
+    Matemáticas
+    <div id="mates" class="unidad">
+      <a href="#">Próximamente...</a>
+    </div>
+  </div>
+
+  <div class="materia" onclick="toggleUnidades('ciencias')">
+    Ciencias
+    <div id="ciencias" class="unidad">
+      <a href="#">Próximamente...</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>Hecho con ❤️ para aprender y disfrutar - Proyecto Educativo</p>
+</footer>
+
+<script>
+function toggleUnidades(id) {
+  const elemento = document.getElementById(id);
+  elemento.style.display = (elemento.style.display === 'block') ? 'none' : 'block';
+}
+</script>
+
+</body>
+</html>

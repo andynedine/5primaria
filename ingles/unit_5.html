@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego de Flashcards - Inglés 5º Primaria - Unidad 5</title>
+<link rel="stylesheet" href="../css/estilos.css"> <!-- estilos comunes -->
+<link rel="stylesheet" href="../css/juego.css">    <!-- estilos específicos del juego -->
+</head>
+<body>
+
+<header>
+    <header>
+        <a href="../index.html" class="logo-link">
+          <h1>📚 Zona de Juegos Educativos 📚</h1>
+        </a>
+      </header>
+</header>
+
+<main>
+  <h2>Inglés 5º Primaria - Unidad 5: Flashcards</h2>
+
+  <div class="scoreboard">
+    Pregunta: <span id="questionNumber">1</span>/100 | Correctas: <span id="correctAnswers">0</span> | Puntuación: <span id="score">0</span>
+  </div>
+
+  <div class="card" id="flashcard">
+    <div class="inner-card" id="cardInner">
+      <div class="front" id="frontCard">
+        <div class="question" id="questionText"></div>
+        <div class="answers" id="answerButtons"></div>
+      </div>
+      <div class="back" id="correctAnswer"></div>
+    </div>
+  </div>
+
+  <button class="restart" onclick="restartGame()">🔄 Reiniciar</button>
+</main>
+
+<footer>
+  <p>Hecho con ❤️ para aprender y disfrutar - Proyecto Educativo</p>
+</footer>
+
+<script>
+    let questions = [
+        {q: '¿Cuándo usamos "may" en inglés?', options: ['Cuando algo es seguro.', 'Cuando algo es posible.', 'Cuando algo ya sucedió.'], answer: 1},
+        {q: '¿Qué significa "comparative"?', options: ['Comparar dos cosas.', 'Comparar tres cosas.', 'Hablar de pasado.'], answer: 0},
+        {q: '¿Qué se añade a un adjetivo corto para formar un comparativo?', options: ['-ing', '-est', '-er'], answer: 2},
+        {q: '¿Qué palabra usamos después de un comparativo?', options: ['The', 'Than', 'That'], answer: 1},
+        {q: '¿Qué es un "superlative"?', options: ['Comparar dos cosas.', 'Ser el mejor de varios.', 'Hacer una predicción.'], answer: 1},
+        {q: '¿Cómo formamos el superlativo de "interesting"?', options: ['Interestingest', 'More interesting', 'The most interesting'], answer: 2},
+        {q: '¿Qué palabra se pone delante de un superlativo?', options: ['Than', 'The', 'To'], answer: 1},
+        {q: '¿Qué tiempo verbal describe acciones en progreso?', options: ['Present simple', 'Present progressive', 'Past simple'], answer: 1},
+        {q: '¿Qué dos partes forman el "present progressive"?', options: ['To be + verbo + -ing', 'Verbo en pasado + -ed', 'Verbo + will'], answer: 0},
+        {q: '¿Cuál de estas frases está en present progressive?', options: ['I am studying.', 'I study.', 'I studied.'], answer: 0},
+        {q: 'Selecciona el superlativo correcto de "small".', options: ['The smallest', 'The more small', 'Smallestest'], answer: 0},
+        {q: 'Selecciona el comparativo correcto de "easy".', options: ['Easier', 'More easy', 'Easiest'], answer: 0},
+        {q: 'Elige el uso correcto de "may".', options: ['I may go to the party.', 'I may went to the party.', 'I may going to the party.'], answer: 0},
+        {q: 'Completa: "She is _____ a book."', options: ['read', 'reading', 'reads'], answer: 1},
+        {q: 'Elige la frase correcta.', options: ['He run fast.', 'He is running fast.', 'He running fast.'], answer: 1},
+        {q: '¿Qué forma correcta es un superlativo largo?', options: ['The most beautiful', 'The beautifullest', 'Beautifuller'], answer: 0},
+        {q: 'Selecciona el uso correcto de "might".', options: ['She might come.', 'She mights come.', 'She might coming.'], answer: 0},
+        {q: '¿Qué opción muestra un error en el uso de "than"?', options: ['He is faster than me.', 'He is fast than me.', 'He runs faster than me.'], answer: 1},
+        {q: '¿Cuál es la forma correcta del superlativo de "good"?', options: ['Goodest', 'Better', 'The best'], answer: 2},
+        {q: '¿Cuál es la forma comparativa de "bad"?', options: ['Bader', 'Worse', 'Worser'], answer: 1},
+        {q: '¿Cuál es el comparativo de "tall"?', options: ['Taller', 'Tallest', 'More tall'], answer: 0},
+        {q: '¿Cómo se dice \"el más divertido\" en inglés?', options: ['Funnier', 'The funniest', 'Funnyest'], answer: 1},
+        {q: 'Selecciona el uso correcto de \"present progressive\".', options: ['I read a book.', 'I am reading a book.', 'I reads a book.'], answer: 1},
+        {q: '¿Qué significa \"might\"?', options: ['Seguridad', 'Obligación', 'Posibilidad'], answer: 2},
+        {q: '¿Cómo se forma el comparativo de \"big\"?', options: ['Biggest', 'Biger', 'Bigger'], answer: 2},
+        {q: '¿Qué estructura forma el present progressive?', options: ['Have + verbo + -ed', 'Be + verbo + -ing', 'Will + verbo'], answer: 1},
+        {q: '¿Cuál es el superlativo de \"bad\"?', options: ['Worst', 'Baddest', 'The bad'], answer: 0},
+        {q: '¿Qué opción es correcta?', options: ['She is studies.', 'She is studying.', 'She studying.'], answer: 1},
+        {q: '¿Cuál de estas frases muestra una posibilidad?', options: ['I might go.', 'I am go.', 'I goes.'], answer: 0},
+        {q: '¿Qué significa \"comparative\"?', options: ['Forma para comparar dos cosas.', 'Forma del futuro.', 'Forma del pasado.'], answer: 0},
+        {q: '¿Cuál es el comparativo de "young"?', options: ['Younger', 'Youngest', 'More young'], answer: 0},
+        {q: '¿Cuál es el superlativo de "happy"?', options: ['The happier', 'The happiest', 'Happier'], answer: 1},
+        {q: 'Selecciona la frase correcta en present progressive.', options: ['He is playing football.', 'He playing football.', 'He play football.'], answer: 0},
+        {q: '¿Qué opción muestra una posibilidad usando "might"?', options: ['They might arrive late.', 'They mights arrive late.', 'They might arriving late.'], answer: 0},
+        {q: '¿Cuál es el comparativo de "strong"?', options: ['Stronger', 'Strongest', 'More strong'], answer: 0},
+        {q: '¿Cuál es el superlativo de "interesting"?', options: ['Most interesting', 'Interestingest', 'The most interesting'], answer: 2},
+        {q: '¿Qué se necesita para formar un comparativo correcto?', options: ['El adjetivo + -er o "more"', 'El adjetivo + -ing', 'El adjetivo + -est'], answer: 0},
+        {q: 'Selecciona la opción correcta para comparar dos cosas.', options: ['Than', 'The', 'More'], answer: 0},
+        {q: '¿Cuál frase usa correctamente "may"?', options: ['It may rains.', 'It may rain.', 'It may raining.'], answer: 1},
+        {q: 'Completa: "We are _____ TV."', options: ['watch', 'watching', 'watches'], answer: 1},
+        {q: '¿Cuál es el comparativo de "cold"?', options: ['Colder', 'Coldest', 'More cold'], answer: 0},
+        {q: '¿Cómo es el superlativo de "hot"?', options: ['Hotter', 'The hottest', 'Hotest'], answer: 1},
+        {q: 'Selecciona la frase correcta en present progressive.', options: ['They plays.', 'They are playing.', 'They playing.'], answer: 1},
+        {q: '¿Qué opción muestra una posibilidad usando "may"?', options: ['It may snow tomorrow.', 'It mays snow tomorrow.', 'It mays snow tomorrow.'], answer: 0},
+        {q: '¿Cuál es el comparativo de "late"?', options: ['Later', 'Latist', 'More late'], answer: 0},
+        {q: '¿Qué palabra usamos para comparar dos cosas?', options: ['The', 'Than', 'Then'], answer: 1},
+        {q: '¿Qué se añade a un adjetivo largo para formar comparativo?', options: ['-er', 'the most', 'more'], answer: 2},
+        {q: '¿Qué opción usa \"might\" correctamente?', options: ['She might calls.', 'She might call.', 'She might calling.'], answer: 1},
+        {q: 'Selecciona la forma correcta en superlativo.', options: ['The bigger', 'The biggest', 'The most big'], answer: 1},
+        {q: '¿Cuál es la frase en present progressive?', options: ['We swim.', 'We are swimming.', 'We swims.'], answer: 1},
+        {q: '¿Cómo se forma el comparativo de "small"?', options: ['Smaller', 'Smallest', 'More small'], answer: 0},
+        {q: '¿Qué opción muestra el superlativo correcto de "easy"?', options: ['The easiest', 'Most easier', 'Easiestest'], answer: 0},
+        {q: 'Selecciona la frase en present progressive.', options: ['She writing.', 'She is writing.', 'She write.'], answer: 1},
+        {q: '¿Qué opción muestra posibilidad?', options: ['I might go.', 'I go.', 'I gone.'], answer: 0},
+        {q: '¿Cuál es el comparativo de "old"?', options: ['Older', 'Oldest', 'More old'], answer: 0},
+        {q: '¿Cuál es el superlativo de "young"?', options: ['Younger', 'Youngest', 'More young'], answer: 1},
+        {q: '¿Qué estructura correcta se usa en present progressive?', options: ['am/is/are + verbo-ing', 'have + verbo', 'was + verbo'], answer: 0},
+        {q: '¿Qué forma correcta expresa futuro?', options: ['am going to', 'am gone', 'am go'], answer: 0},
+        {q: '¿Qué opción usa \"may\" de manera correcta?', options: ['He may goes.', 'He may go.', 'He may going.'], answer: 1},
+        {q: '¿Cuál es el comparativo de "nice"?', options: ['Nicer', 'Nicest', 'More nice'], answer: 0},
+        {q: '¿Cómo es el superlativo de "strong"?', options: ['The strongest', 'The most strong', 'Strongestest'], answer: 0},
+        {q: '¿Qué palabra indica comparación?', options: ['The', 'Than', 'That'], answer: 1},
+        {q: '¿Qué opción contiene un error?', options: ['The most beautiful.', 'The beautifulest.', 'The most interesting.'], answer: 1},
+        {q: 'Selecciona el present progressive.', options: ['They are dancing.', 'They dances.', 'They dance.'], answer: 0},
+        {q: '¿Qué opción correcta expresa posibilidad?', options: ['She might help.', 'She mights help.', 'She helping.'], answer: 0},
+        {q: '¿Qué adjetivo cambia a "happier" en comparativo?', options: ['happy', 'happiness', 'happiest'], answer: 0},
+        {q: '¿Qué adjetivo en superlativo es correcto?', options: ['The tallest', 'The most tall', 'Taller'], answer: 0},
+        {q: '¿Qué significa \"present progressive\"?', options: ['Acción actual', 'Acción pasada', 'Acción futura'], answer: 0},
+        {q: '¿Qué opción correcta usa "might"?', options: ['I might study.', 'I mights study.', 'I might studying.'], answer: 0},
+        {q: '¿Cuál es el superlativo de "big"?', options: ['The bigger', 'The biggest', 'Biger'], answer: 1},
+        {q: '¿Cómo formas el comparativo de "friendly"?', options: ['Friendlier', 'More friendly', 'Both are correct'], answer: 2},
+        {q: '¿Cómo sería el superlativo de "friendly"?', options: ['Friendliest', 'Most friendly', 'Both are correct'], answer: 2},
+        {q: '¿Qué opción es present progressive?', options: ['I am singing.', 'I sings.', 'I sing.'], answer: 0},
+        {q: '¿Qué opción muestra comparación entre dos cosas?', options: ['Big and bigger', 'The big', 'The biggest'], answer: 0},
+        {q: '¿Qué adjetivo es irregular en comparativo?', options: ['Good → Better', 'Fast → Faster', 'Tall → Taller'], answer: 0},
+        {q: '¿Qué superlativo es correcto?', options: ['The worst', 'The badest', 'The worster'], answer: 0},
+        {q: '¿Cuál oración indica acción continua?', options: ['I read.', 'I am reading.', 'I will read.'], answer: 1},
+        {q: '¿Qué palabra ayuda a construir el present progressive?', options: ['Am/Is/Are', 'Was/Were', 'Have/Has'], answer: 0},
+        {q: '¿Cuál es el comparativo de "beautiful"?', options: ['Beautifuller', 'More beautiful', 'Beautifullest'], answer: 1},
+        {q: '¿Cuál opción es un error?', options: ['The most intelligent.', 'The intelligentest.', 'The most careful.'], answer: 1},
+        {q: '¿Cuál es el comparativo de "small"?', options: ['Smaller', 'Smallest', 'More small'], answer: 0},
+        {q: '¿Qué superlativo corresponde a "easy"?', options: ['The easiest', 'Most easier', 'Easiestest'], answer: 0},
+        {q: 'Selecciona la frase en present progressive.', options: ['She is writing.', 'She writing.', 'She writes.'], answer: 0},
+        {q: '¿Qué palabra expresa posibilidad?', options: ['might', 'should', 'have'], answer: 0},
+        {q: '¿Cuál es el comparativo de "old"?', options: ['Older', 'Oldest', 'More old'], answer: 0},
+        {q: '¿Cómo es el superlativo de "young"?', options: ['Younger', 'Youngest', 'More young'], answer: 1},
+        {q: '¿Qué verbo auxiliar se usa en el present progressive?', options: ['am/is/are', 'have/has', 'was/were'], answer: 0},
+        {q: '¿Qué estructura indica futuro?', options: ['am going to', 'was going to', 'goes to'], answer: 0},
+        {q: '¿Qué uso correcto de "may" indica posibilidad?', options: ['She may come.', 'She may coming.', 'She may comes.'], answer: 0},
+        {q: '¿Cómo es el superlativo de "strong"?', options: ['The strongest', 'The most strong', 'Strongestest'], answer: 0},
+        {q: '¿Qué palabra usamos para comparar?', options: ['Than', 'Then', 'The'], answer: 0},
+        {q: '¿Qué frase tiene error?', options: ['The beautifulest.', 'The most beautiful.', 'The most intelligent.'], answer: 0},
+        {q: 'Selecciona la opción en present progressive.', options: ['They are dancing.', 'They dance.', 'They dances.'], answer: 0},
+        {q: '¿Qué opción correcta expresa posibilidad?', options: ['She might help.', 'She mights help.', 'She helping.'], answer: 0},
+        {q: '¿Qué adjetivo cambia a "happier"?', options: ['happy', 'happiness', 'happiest'], answer: 0},
+        {q: '¿Qué superlativo es correcto?', options: ['The tallest', 'Taller', 'The most tall'], answer: 0},
+        {q: '¿Qué significa "present progressive"?', options: ['Acción en progreso', 'Acción pasada', 'Acción futura'], answer: 0},
+        {q: '¿Qué oración muestra acción continua?', options: ['I am reading.', 'I will read.', 'I read.'], answer: 0},
+        {q: '¿Qué verbo usamos en present progressive?', options: ['Am/Is/Are', 'Have/Has', 'Had'], answer: 0},
+        {q: '¿Cuál es el comparativo correcto de "beautiful"?', options: ['More beautiful', 'Beautifuller', 'Beautifullest'], answer: 0},
+        {q: '¿Qué opción es incorrecta?', options: ['The most intelligent.', 'The most careful.', 'The intelligentest.'], answer: 2},
+    
+    ];
+    
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+    
+    let currentQuestion = 0;
+    let correct = 0;
+    let score = 0;
+    
+    function loadQuestion() {
+      document.getElementById('questionNumber').innerText = currentQuestion + 1;
+      document.getElementById('questionText').innerText = questions[currentQuestion].q;
+      document.getElementById('answerButtons').innerHTML = '';
+      document.getElementById('correctAnswer').innerText = '';
+      document.getElementById('cardInner').style.transform = 'rotateY(0deg)';
+      document.getElementById('frontCard').style.background = 'white';
+      document.getElementById('correctAnswer').style.background = 'white';
+    
+      questions[currentQuestion].options.forEach((option, index) => {
+        const btn = document.createElement('button');
+        btn.innerText = option;
+        btn.onclick = () => checkAnswer(index);
+        document.getElementById('answerButtons').appendChild(btn);
+      });
+    }
+    
+    function checkAnswer(selected) {
+      const correctIndex = questions[currentQuestion].answer;
+      const correctOption = questions[currentQuestion].options[correctIndex];
+    
+      if (selected === correctIndex) {
+        correct++;
+        score += 10;
+        document.getElementById('correctAnswer').innerHTML = `<span class="correcto">✔ ¡Correcto!</span><br/><div>Respuesta: <b>${correctOption}</b></div>`;
+        document.getElementById('correctAnswer').style.background = '#d4f9d4'; // fondo verde claro
+      } else {
+        document.getElementById('correctAnswer').innerHTML = `<span class="incorrecto">✘ ¡Incorrecto!</span><br/><div>La respuesta correcta era: <b>${correctOption}</b></div>`;
+        document.getElementById('correctAnswer').style.background = '#f9d4d4'; // fondo rojo claro
+      }
+    
+      document.getElementById('correctAnswers').innerText = correct;
+      document.getElementById('score').innerText = score;
+    
+      document.getElementById('cardInner').style.transform = 'rotateY(180deg)';
+    
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          loadQuestion();
+        } else {
+          document.getElementById('flashcard').innerHTML = '<h2>🎉 ¡Juego Terminado! 🎉</h2><p>Acertaste ' + correct + ' de ' + questions.length + ' preguntas.<br>Puntuación final: ' + score + '</p>';
+        }
+      }, 3000);
+    }
+    
+    function restartGame() {
+      shuffle(questions);
+      currentQuestion = 0;
+      correct = 0;
+      score = 0;
+      document.getElementById('flashcard').innerHTML = '<div class="inner-card" id="cardInner"><div class="front" id="frontCard"><div class="question" id="questionText"></div><div class="answers" id="answerButtons"></div></div><div class="back" id="correctAnswer"></div></div>';
+      document.getElementById('correctAnswers').innerText = '0';
+      document.getElementById('score').innerText = '0';
+      loadQuestion();
+    }
+    
+    shuffle(questions);
+    loadQuestion();
+</script>
+
+</body>
+</html>
